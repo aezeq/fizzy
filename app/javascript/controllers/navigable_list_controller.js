@@ -37,6 +37,8 @@ export default class extends Controller {
   }
 
   navigate(event) {
+    if (this.#hasOpenDialog) return
+
     this.#keyHandlers[event.key]?.call(this, event)
     this.#relayNavigationToParentNavigableList(event)
   }
@@ -219,6 +221,10 @@ export default class extends Controller {
     return this.itemTargets.filter(item => {
       return item.checkVisibility() && !item.hidden
     })
+  }
+
+  get #hasOpenDialog() {
+    return this.element.querySelector("dialog[open]") !== null
   }
 
   #keyHandlers = {
