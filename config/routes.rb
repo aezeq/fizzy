@@ -2,10 +2,16 @@ Rails.application.routes.draw do
   root "events#index"
 
   namespace :account do
+    resource :billing_portal, only: :show
+    resource :entropy
     resource :join_code
     resource :settings
-    resource :entropy
+    resource :subscription
     resources :exports, only: [ :create, :show ]
+  end
+
+  namespace :stripe do
+    resource :webhooks, only: :create
   end
 
   resources :users do

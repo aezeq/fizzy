@@ -37,6 +37,9 @@ gem "rubyzip", require: "zip"
 gem "mittens"
 gem "useragent", bc: "useragent"
 
+# Billing
+gem "stripe", "~> 18.0"
+
 # Operations
 gem "autotuner"
 gem "mission_control-jobs"

@@ -1,0 +1,42 @@
+class Plan
+  PLANS = {
+    free_v1: { name: "Free", price: 0, card_limit: 1000, storage_limit: 5.gigabytes },
+    monthly_v1: { name: "Monthly", price: 20_00, card_limit: Float::INFINITY, storage_limit: 5.gigabytes, stripe_price_id: "price_1SaHykRwChFE4it8PePOdDpS" }
+  }
+
+  attr_reader :key, :name, :price, :card_limit, :storage_limit, :stripe_price_id
+
+  class << self
+    def all
+      @all ||= PLANS.map { |key, properties| new(key: key, **properties) }
+    end
+
+    def default
+      @default ||= all.find(&:free?)
+    end
+
+    def find(key)
+      @all_by_key ||= all.index_by(&:key).with_indifferent_access
+      @all_by_key[key.to_sym]
+    end
+
+    alias [] find
+  end
+
+  def initialize(key:, name:, price:, card_limit:, storage_limit:, stripe_price_id: nil)
+    @key = key
+    @name = name
+    @price = price
+    @card_limit = card_limit
+    @storage_limit = storage_limit
+    @stripe_price_id = stripe_price_id
+  end
+
+  def free?
+    price.zero?
+  end
+
+  def paid?
+    !free?
+  end
+end
