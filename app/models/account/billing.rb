@@ -8,4 +8,8 @@ module Account::Billing
   def plan
     subscription&.plan || Plan.default
   end
+
+  def subscribed?
+    subscription&.stripe_customer_id.present?
+  end
 end

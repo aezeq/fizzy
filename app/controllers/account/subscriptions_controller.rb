@@ -1,9 +1,9 @@
 class Account::SubscriptionsController < ApplicationController
   before_action :ensure_admin
   before_action :set_account
+  before_action :set_stripe_session, only: :show
 
   def show
-    @session = Stripe::Checkout::Session.retrieve(params[:session_id])
   end
 
   def create
@@ -31,6 +31,10 @@ class Account::SubscriptionsController < ApplicationController
   private
     def set_account
       @account = Current.account
+    end
+
+    def set_stripe_session
+      @session = Stripe::Checkout::Session.retrieve(params[:session_id]) if params[:session_id]
     end
 
     def find_or_create_stripe_customer
