@@ -9,10 +9,6 @@ class Account::Subscription < ApplicationRecord
     Plan.find(plan_key)
   end
 
-  def paid?
-    !plan.free? && active?
-  end
-
   def to_be_canceled?
     active? && cancel_at.present?
   end

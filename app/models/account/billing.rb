@@ -6,7 +6,11 @@ module Account::Billing
   end
 
   def plan
-    subscription&.plan || Plan.free
+    active_subscription&.plan || Plan.free
+  end
+
+  def active_subscription
+    subscription if subscription&.active?
   end
 
   def subscribed?
