@@ -11,8 +11,12 @@ class Plan
       @all ||= PLANS.map { |key, properties| new(key: key, **properties) }
     end
 
-    def default
-      @default ||= all.find(&:free?)
+    def free
+      @free ||= all.find(&:free?)
+    end
+
+    def paid
+      @paid ||= all.find(&:paid?)
     end
 
     def find(key)

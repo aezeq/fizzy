@@ -6,7 +6,7 @@ module Account::Billing
   end
 
   def plan
-    subscription&.plan || Plan.default
+    subscription&.plan || Plan.free
   end
 
   def subscribed?
