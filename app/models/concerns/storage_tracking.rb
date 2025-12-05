@@ -4,6 +4,8 @@ module StorageTracking
   included do
     after_save :track_storage_updated
     after_destroy :track_storage_removed
+
+    delegate :adjust_storage_later, to: :account
   end
 
   def bytes_used
@@ -26,10 +28,6 @@ module StorageTracking
 
     def track_storage_removed
       adjust_storage_later(-bytes_used)
-    end
-
-    def adjust_storage_later(delta)
-      account.adjust_storage_later(delta)
     end
 
     def rich_text_associations
