@@ -1,5 +1,9 @@
 <% @page_title = "Great! Now enter your name" %>
 
+<% if Current.user && !Current.user.verified? %>
+  <div data-controller="beacon" data-beacon-url-value="<%= users_verifications_path %>"></div>
+<% end %>
+
 <div class="panel panel--centered flex flex-column gap-half">
   <h1 class="txt-large font-weight-black margin-none"><%= @page_title %></h1>
 
