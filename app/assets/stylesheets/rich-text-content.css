@@ -28,7 +28,7 @@
       }
     }
 
-    :where(ol, ul) {
+    :where(ol, ul):not(.lexxy-prompt-menu) {
       padding-inline-start: 3ch;
     }
 
