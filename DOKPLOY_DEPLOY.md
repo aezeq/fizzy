@@ -105,9 +105,6 @@ Necesitas credenciales de un proveedor SMTP. Algunas opciones recomendadas:
 3. **Completa TODOS los valores**. Aquí un ejemplo:
 
    ```env
-   # Puerto de la aplicación
-   APP_PORT=80
-   
    # URL de tu aplicación
    APP_HOST=fizzy.tudominio.com
    
@@ -191,11 +188,14 @@ Alternativamente, algunos paneles de Dokploy permiten subir el archivo `.env` di
 1. En la sección **"Domains"** o **"Dominios"**:
    - Agrega tu dominio: `fizzy.tudominio.com`
    - Habilita **SSL/HTTPS** (generalmente automático con Let's Encrypt)
+   - **IMPORTANTE**: Asegúrate que la variable `APP_HOST` en las variables de entorno coincida exactamente con el dominio que configuraste
 
 2. Asegúrate que tu DNS apunte correctamente:
    ```
    fizzy.tudominio.com  →  A record  →  IP_DE_TU_SERVIDOR
    ```
+
+**Nota**: Dokploy usa Traefik como proxy reverso, por lo que NO necesitas exponer el puerto 80 directamente. El docker-compose ya está configurado con los labels de Traefik necesarios.
 
 ## 🚢 Paso 6: Deploy Inicial
 
@@ -255,6 +255,28 @@ Una vez que el deploy esté completo y los contenedores corriendo:
    - Si no llega, revisa la configuración SMTP
 
 ## 🔍 Troubleshooting
+
+### Error: "port is already allocated" o "Bind for 0.0.0.0:80 failed"
+
+Este error significa que el puerto 80 ya está en uso por el proxy de Dokploy (Traefik). **Esto es normal y esperado**.
+
+**Solución**: El `docker-compose.yml` ya está configurado correctamente para usar Traefik. Asegúrate de:
+
+1. No tener una sección `ports:` en el servicio `app` del docker-compose
+2. Tener los labels de Traefik correctamente configurados
+3. La variable `APP_HOST` debe coincidir exactamente con el dominio configurado en Dokploy
+4. Redeploya después de actualizar el archivo
+
+Si modificaste el `docker-compose.yml`, verifica que use `expose:` en lugar de `ports:`:
+
+```yaml
+app:
+  expose:
+    - "80"  # ✅ Correcto
+  # NO uses:
+  # ports:
+  #   - "80:80"  # ❌ Incorrecto para Dokploy
+```
 
 ### La aplicación no inicia
 

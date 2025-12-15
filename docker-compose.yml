@@ -24,8 +24,15 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    ports:
-      - "${APP_PORT:-80}:80"
+    expose:
+      - "80"
+    labels:
+      # Traefik labels para Dokploy
+      - "traefik.enable=true"
+      - "traefik.http.routers.fizzy.rule=Host(`${APP_HOST}`)"
+      - "traefik.http.routers.fizzy.entrypoints=websecure"
+      - "traefik.http.routers.fizzy.tls.certresolver=letsencrypt"
+      - "traefik.http.services.fizzy.loadbalancer.server.port=80"
     depends_on:
       db:
         condition: service_healthy
