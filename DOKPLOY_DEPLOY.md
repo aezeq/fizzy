@@ -91,6 +91,30 @@ Necesitas credenciales de un proveedor SMTP. Algunas opciones recomendadas:
 
 ## 📝 Paso 3: Configurar Variables de Entorno
 
+### Opción A: Testing Rápido (valores dummy)
+
+Si solo quieres **probar** que funciona sin configurar todo:
+
+1. **Copia el archivo de testing**:
+   ```bash
+   cp .env.testing .env
+   ```
+
+2. **Edita solo estos valores**:
+   ```bash
+   nano .env
+   ```
+   
+   Cambia únicamente:
+   - `APP_HOST=fizzy.tudominio.com` → Tu dominio real en Dokploy
+   - `MYSQL_ROOT_PASSWORD` → Una contraseña diferente (cualquiera)
+
+3. **Listo** - Ya puedes deployar. Los emails no funcionarán pero la app sí.
+
+### Opción B: Configuración Completa (producción)
+
+Si quieres una instalación completa y funcional:
+
 1. **Copia el archivo de ejemplo**:
    ```bash
    cp .env.example .env
@@ -255,6 +279,38 @@ Una vez que el deploy esté completo y los contenedores corriendo:
    - Si no llega, revisa la configuración SMTP
 
 ## 🔍 Troubleshooting
+
+### Error: "secret_key_base must be a type of String"
+
+Esto significa que la variable `SECRET_KEY_BASE` no está configurada o está vacía en Dokploy.
+
+**Solución rápida para testing**:
+
+1. Genera un secret key:
+   ```bash
+   openssl rand -hex 64
+   ```
+
+2. En Dokploy, agrega la variable de entorno:
+   - Nombre: `SECRET_KEY_BASE`
+   - Valor: (pega el resultado del comando anterior)
+
+3. Redeploya
+
+**O usa el archivo `.env.testing`** que ya tiene valores dummy listos para usar.
+
+### Error: "caching_sha2_password requires either TCP with TLS"
+
+MySQL 8.0 usa un método de autenticación que requiere TLS, pero el cliente no lo soporta.
+
+**Solución**: El `docker-compose.yml` ya está configurado con el fix. Asegúrate de tener la versión actualizada del repo y redeploya.
+
+Si modificaste el docker-compose manualmente, agrega esta línea al servicio `db`:
+
+```yaml
+db:
+  command: --default-authentication-plugin=mysql_native_password
+```
 
 ### Error: "port is already allocated" o "Bind for 0.0.0.0:80 failed"
 

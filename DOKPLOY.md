@@ -1,6 +1,24 @@
 # 🚀 Deploy Rápido en Dokploy
 
-¿Quieres deployar Fizzy en Dokploy? Sigue estos pasos:
+¿Quieres deployar Fizzy en Dokploy? Tienes dos opciones:
+
+## ⚡ Solo Probar (5 minutos)
+
+**[→ Quick Start Guide](QUICKSTART.md)** - Deploy con valores dummy para ver que funciona
+
+- ✅ Deploy en 5 minutos
+- ✅ Ve la interfaz funcionando
+- ❌ Login no funcionará (necesita SMTP real)
+
+## 🔧 Instalación Completa
+
+**[→ Guía Completa de Deployment](DOKPLOY_DEPLOY.md)** - Configuración paso a paso para producción
+
+- ✅ SMTP configurado
+- ✅ Login y emails funcionando
+- ✅ Listo para usar en serio
+
+---
 
 ## Inicio Rápido
 
